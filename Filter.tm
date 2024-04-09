@@ -86,13 +86,74 @@
 
   The finite difference solver:\ 
 
-  M. Yueh, W. Lin, and S. T. Yau, \PAn efficient numerical method\ 
+  M. Yueh, W. Lin, and S. T. Yau, \PAn efficient num<nbhyph>erical method\ 
 
   for solving high-dimensional nonlinear filtering problems,\Q Com\B
 
   mun. Inf. Syst., vol. 14, no. 4, pp. 243-262, 2014.
 
+  <section|Numerical Method for NLS>
+
+  For\ 
+
+  <\equation*>
+    <around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|d*x<rsub|t>=f<around*|(|x<rsub|t>,t|)>*d*t+*d*v<rsub|t>>>|<row|<cell|d*y<rsub|t>=h<around*|(|x<rsub|t>,t|)>*d*t+d*w<rsub|t>>>>>>|\<nobracket\>>
+  </equation*>
+
+  The FKE becomes
+
+  <\equation*>
+    <frac|\<partial\>|\<partial\>*t>*u<rsub|j><around|(|x,t|)>=<frac|1|2>\<Delta\>*u<rsub|j><around|(|x,t|)>-f<around*|(|x|)>\<cdot\>\<nabla\>u<rsub|j><around*|(|x,t|)>-<around*|(|\<nabla\>\<cdot\>f<around*|(|x|)>+<frac|1|2><around*|\<\|\|\>|h<around*|(|s|)>|\<\|\|\>><rsub|2><rsup|2>|)>u<rsub|j><around*|(|x,t|)>
+  </equation*>
+
+  The initial condition is <math|u<around*|(|0,s|)>=\<sigma\><rsub|0><around*|(|s|)>>,
+  once the new measurement <math|y<around*|(|t<rsub|k>|)>> arrive we correct
+  the solution <math|<around*|(|u<rsub|j><around*|(|x,t<rsub|k>|)>|)>> at
+  <math|t<rsub|k>> by
+
+  <\equation*>
+    exp<around*|{|<around*|[|y<around*|(|t<rsub|k>|)>-y<around*|(|t<rsub|k-1>|)>|]>\<cdot\>h<around*|(|x|)>|}>u<rsub|j><around*|(|x,t<rsub|k>|)>
+  </equation*>
+
+  Initially, we discretize the time interval
+  <math|<around*|[|t<rsub|k-1>,t<rsub|k>|]>> by taking a uniform partition
+  <math|<around*|[|t<rsub|k-1>,t<rsub|k-1>+\<Delta\>t,\<ldots\>t<rsub|k-1>+N\<Delta\>t=t<rsub|k>|]>>.
+
+  For the sake of computations, we restrict the domain
+  <math|\<bbb-R\><rsup|D>> to <math|<around*|[|-R,R|]><rsup|D> cells> and
+  partition it uniformly.
+
+  <subsection|2D example>
+
+  <\equation*>
+    <around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|d*x<rsub|1>=cos<around*|(|x<rsub|1>|)>d*v<rsub|1>>>|<row|<cell|d*x<rsub|2>=cos<around*|(|x<rsub|2>|)>d*v<rsub|2>>>|<row|<cell|d*y<rsub|1>=x<rsub|1><rsup|3>*d*t+d*w<rsub|1>>>|<row|<cell|d*y<rsub|2>=x<rsub|2><rsup|3>*d*t+d*w<rsub|2>>>>>>|\<nobracket\>>
+  </equation*>
+
+  Then\ 
+
+  <\equation*>
+    f<around*|(|x|)>=<around*|[|<tabular*|<tformat|<table|<row|<cell|cos<around*|(|x<rsub|1>|)>>>|<row|<cell|cos<around*|(|x<rsub|2>|)>>>>>>|]>,h<around*|(|x|)>=<around*|[|<tabular*|<tformat|<table|<row|<cell|x<rsub|1><rsup|3>>>|<row|<cell|x<rsub|2><rsup|3>>>>>>|]>
+  </equation*>
+
+  The strong form of equation will be\ 
+
+  <\equation*>
+    <frac|\<partial\>|\<partial\>*t>*u<rsub|j>=<frac|1|2>\<Delta\>*u<rsub|j>-cos<around*|(|x<rsub|1>|)>\<partial\><rsub|x<rsub|1>>u<rsub|j>-cos<around*|(|x<rsub|2>|)>\<partial\><rsub|x<rsub|2>>u<rsub|j>+<around*|(|sin<around*|(|x<rsub|1>|)>+sin<around*|(|x<rsub|2>|)>-<frac|1|2><around*|(|x<rsub|1><rsup|6>+x<rsub|2><rsup|6>|)>|)>u<rsub|j>
+  </equation*>
+
+  The weak form of equation will be\ 
+
+  <\equation*>
+    <frac|\<less\>u<rsub|j><around*|(|t+\<Delta\>t|)>,v\<gtr\>-\<less\>u<rsub|j><around*|(|t|)>,v\<gtr\>|\<Delta\>t>=-<frac|1|2>\<less\>\<nabla\>u<rsub|j>,\<nabla\>v\<gtr\>-\<less\>f\<cdot\>\<nabla\>u<rsub|j>,v\<gtr\>+\<less\>a<around*|(|x|)>u<rsub|j>,v<rsub|>\<gtr\>
+  </equation*>
+
+  where <math|a<around*|(|x|)>=sin<around*|(|x<rsub|1>|)>+sin<around*|(|x<rsub|2>|)>-<frac|1|2><around*|(|x<rsub|1><rsup|6>+x<rsub|2><rsup|6>|)>>.
+  The boundary condition is dirichlet boundary condition.
+
   \;
+
+  Here is some discretization parameter: <math|\<Delta\>t=0.001,\<sigma\><rsub|0>(s)
+  = exp {\<minus\>10<around*|\||x|\|><rsup|2>},h=0.1,\<Omega\>=<around*|[|-5,5|]><rsup|2>>.
 
   <section|Numerical Example>
 
@@ -150,6 +211,49 @@
   <math|u<rsub|j><around*|(|x,t+\<Delta\>t|)> >from
   <math|u<rsub|j><around*|(|x,t|)>>.
 
+  <subsubsection|Example with explicit solution>
+
+  First consider a heat equation in <math|<around*|[|0,\<pi\>|]><rsup|2> >\ 
+
+  <\equation*>
+    u<rsub|t>=<frac|1|2><around*|(|u<rsub|x<rsub|1>x<rsub|1>>+u<rsub|x<rsub|2>x<rsub|2>>|)>
+  </equation*>
+
+  The solution <math|u<around*|(|x|)>=e<rsup|-t>sin<around*|(|x<rsub|1>|)>sin<around*|(|x<rsub|2>|)>>
+  can be verified by\ 
+
+  <\equation*>
+    -u<around*|(|x,t|)>=<frac|1|2><around*|(|-e<rsup|-t>sin<around*|(|x<rsub|1>|)>sin<around*|(|x<rsub|2>|)>-e<rsup|-t>sin<around*|(|x<rsub|1>|)>sin<around*|(|x<rsub|2>|)>|)>
+  </equation*>
+
+  with initial condition <math|u<around*|(|x,0|)>=sin<around*|(|x<rsub|1>|)>sin<around*|(|x<rsub|2>|)>>.
+  The verification code is update in Heat_equation.ipynb
+
+  Suppose that <math|u=e<rsup|-2t>sin<around*|(|x|)>sin<around*|(|y|)>> ,
+  then\ 
+
+  <\equation*>
+    u<rsub|t>=-2u,\<Delta\>u=2u
+  </equation*>
+
+  <\equation*>
+    u<rsub|t>=<frac|1|2>\<Delta\>u-<around*|[|<tabular*|<tformat|<table|<row|<cell|1>>|<row|<cell|1>>>>>|]>\<cdot\><around*|[|<tabular*|<tformat|<table|<row|<cell|u<rsub|x<rsub|1>>>>|<row|<cell|u<rsub|x<rsub|2>>>>>>>|]>-u+g<around*|(|x,t|)>
+  </equation*>
+
+  To determine <math|g<around*|(|x,t|)>=<around*|[|<tabular*|<tformat|<table|<row|<cell|1>>|<row|<cell|1>>>>>|]>\<cdot\><around*|[|<tabular*|<tformat|<table|<row|<cell|u<rsub|x<rsub|1>>>>|<row|<cell|u<rsub|x<rsub|2>>>>>>>|]>>,
+
+  <\equation*>
+    g<around*|(|x|)>=u<rsub|x<rsub|1>>+u<rsub|x<rsub|2>>=e<rsup|-2t><around*|(|cos<around*|(|x<rsub|1>|)>sin<around*|(|x<rsub|2>|)>+cos<around*|(|x<rsub|2>|)>sin<around*|(|x<rsub|1>|)>|)>
+  </equation*>
+
+  The boundary condition is <math|u<around*|(|x,t|)>=0>.
+
+  \ 
+
+  \;
+
+  \;
+
   <subsection|Post-process>
 
   Obtained <math|u<rsub|j><around*|(|x,t+\<Delta\>t|)>>, we can compute\ 
@@ -181,8 +285,11 @@
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-2|<tuple|2|2>>
     <associate|auto-3|<tuple|2.1|2>>
-    <associate|auto-4|<tuple|2.2|2>>
-    <associate|auto-5|<tuple|2.3|3>>
+    <associate|auto-4|<tuple|3|3>>
+    <associate|auto-5|<tuple|3.1|3>>
+    <associate|auto-6|<tuple|3.2|3>>
+    <associate|auto-7|<tuple|3.2.1|3>>
+    <associate|auto-8|<tuple|3.3|4>>
   </collection>
 </references>
 
@@ -194,20 +301,32 @@
       <no-break><pageref|auto-1><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Numerical
-      Example> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      Method for NLS> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2><vspace|0.5fn>
 
-      <with|par-left|<quote|1tab>|2.1<space|2spc>1D
+      <with|par-left|<quote|1tab>|2.1<space|2spc>2D example
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-3>>
 
-      <with|par-left|<quote|1tab>|2.2<space|2spc>2D
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-4>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Numerical
+      Example> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-4><vspace|0.5fn>
 
-      <with|par-left|<quote|1tab>|2.3<space|2spc>Post-process
+      <with|par-left|<quote|1tab>|3.1<space|2spc>1D
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
+
+      <with|par-left|<quote|1tab>|3.2<space|2spc>2D
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-6>>
+
+      <with|par-left|<quote|2tab>|3.2.1<space|2spc>Example with explicit
+      solution <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-7>>
+
+      <with|par-left|<quote|1tab>|3.3<space|2spc>Post-process
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-8>>
     </associate>
   </collection>
 </auxiliary>
