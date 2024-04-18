@@ -3,6 +3,8 @@
 <style|<tuple|generic|chinese>>
 
 <\body>
+  \<cdot\>\<cdot\>
+
   <doc-data|<doc-title|Neural Operator for Nonlinear
   Filter>|<doc-author|<author-data|<author-name|zhijun
   zeng>|<\author-affiliation>
@@ -155,6 +157,13 @@
   Here is some discretization parameter: <math|\<Delta\>t=0.001,\<sigma\><rsub|0>(s)
   = exp {\<minus\>10<around*|\||x|\|><rsup|2>},h=0.1,\<Omega\>=<around*|[|-5,5|]><rsup|2>>.
 
+  <subsubsection|Initial condition>
+
+  We implement the mixed gaussian initial condition. The center of gaussian
+  is fixed as <math|c<rsub|i,j>=<around*|(|<tfrac|3i-1|10>,<frac|3j-1|10>|)>,i,j=1,2,3>.
+  The decay rate are uniformly sampled from <math|<around*|[|R,2R|]> > where
+  <math|R> is a adjustable factor.
+
   <section|Numerical Example>
 
   <subsection|1D>
@@ -269,13 +278,61 @@
     <around*|(|h<rsup|T><around|(|x,t|)>*S<rsup|-1><around|(|t|)>*y<rsub|t<rsub|j>>|)>*u<around|(|x,t+\<Delta\>t|)>
   </equation*>
 
-  \;
+  <section|Numerical Setup of Neural Operator Problem:2D>
+
+  Consider the problem of\ 
+
+  <\equation*>
+    <around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|d*x<rsub|1>=d*v<rsub|1>>>|<row|<cell|d*x<rsub|2>=d*v<rsub|2>>>|<row|<cell|d*y<rsub|1>=x<rsub|1>*<around*|(|1+0.2*cos
+    <around*|(|x<rsub|2>|)>|)>*d*t+d*w<rsub|1>>>|<row|<cell|d*y<rsub|2>=x<rsub|2>*<around*|(|1+0.2*cos
+    <around*|(|x<rsub|1>|)>|)>*d*t+d*w<rsub|2>>>>>>|\<nobracket\>>
+  </equation*>
+
+  Then\ 
+
+  <\equation*>
+    f<around*|(|x|)>=<around*|[|<tabular*|<tformat|<table|<row|<cell|cos<around*|(|x<rsub|1>|)>>>|<row|<cell|cos<around*|(|x<rsub|2>|)>>>>>>|]>,h<around*|(|x|)>=<around*|[|<tabular*|<tformat|<table|<row|<cell|x<rsub|1><rsup|3>>>|<row|<cell|x<rsub|2><rsup|3>>>>>>|]>
+  </equation*>
+
+  The strong form of equation will be\ 
+
+  <\equation*>
+    <frac|\<partial\>|\<partial\>*t>*u<rsub|j>=<frac|1|2>\<Delta\>*u<rsub|j>-cos<around*|(|x<rsub|1>|)>\<partial\><rsub|x<rsub|1>>u<rsub|j>-cos<around*|(|x<rsub|2>|)>\<partial\><rsub|x<rsub|2>>u<rsub|j>+<around*|(|sin<around*|(|x<rsub|1>|)>+sin<around*|(|x<rsub|2>|)>-<frac|1|2><around*|(|x<rsub|1><rsup|6>+x<rsub|2><rsup|6>|)>|)>u<rsub|j>
+  </equation*>
+
+  The weak form of equation will be\ 
+
+  <\equation*>
+    <frac|\<less\>u<rsub|j><around*|(|t+\<Delta\>t|)>,v\<gtr\>-\<less\>u<rsub|j><around*|(|t|)>,v\<gtr\>|\<Delta\>t>=-<frac|1|2>\<less\>\<nabla\>u<rsub|j>,\<nabla\>v\<gtr\>-\<less\>f\<cdot\>\<nabla\>u<rsub|j>,v\<gtr\>+\<less\>a<around*|(|x|)>u<rsub|j>,v<rsub|>\<gtr\>
+  </equation*>
+
+  where <math|a<around*|(|x|)>=sin<around*|(|x<rsub|1>|)>+sin<around*|(|x<rsub|2>|)>-<frac|1|2><around*|(|x<rsub|1><rsup|6>+x<rsub|2><rsup|6>|)>>.
+  The boundary condition is dirichlet boundary condition.
+
+  <subsection|Grid>
+
+  We choose <math|<around*|[|-3,3|]><rsup|2>> as our domain and discretize it
+  with <math|\<Delta\>h=0.1> and obtain <math|\<bbb-R\><rsup|61\<times\>61>>
+  image sets. We consider the <math|t=<around*|[|0,0.5|]> > with
+  <math|\<Delta\>t=<frac|0.5|50>=0.01> as the generating time length.
+
+  <subsection|Initial Condition>
+
+  \ We implement the mixed gaussian initial condition. The center of gaussian
+  is fixed as <math|c<rsub|i,j>=<around*|(|<tfrac|3i-1|10>,<frac|3j-1|10>|)>,i,j=1,2,3>.
+  The decay rate are uniformly sampled from <math|<around*|[|R,2R|]> > where
+  <math|R> is a adjustable factor.
+
+  <\equation*>
+    u<around*|(|x,y,0|)>=<big|sum><rsub|i=1><rsup|9>\<mu\><rsub|i>exp<around*|(|a<rsub|i><around*|(|x-c<rsub|ij><around*|(|0|)><rsup|2>|)>|\<nobracket\>>exp<around*|(|b<rsub|i><around*|(|y-c<rsub|ij><around*|(|1|)><rsup|2>|)>|\<nobracket\>>,\<mu\><rsub|i>\<sim\>U<around*|[|-1.5,1.5|]>,a<rsub|i>,b<rsub|i>\<sim\>U<around*|[|10,20|]>
+  </equation*>
 
   \;
 </body>
 
 <\initial>
   <\collection>
+    <associate|info-flag|none>
     <associate|page-medium|paper>
   </collection>
 </initial>
@@ -283,13 +340,17 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
+    <associate|auto-10|<tuple|4|4>>
+    <associate|auto-11|<tuple|4.1|5>>
+    <associate|auto-12|<tuple|4.2|5>>
     <associate|auto-2|<tuple|2|2>>
     <associate|auto-3|<tuple|2.1|2>>
-    <associate|auto-4|<tuple|3|3>>
-    <associate|auto-5|<tuple|3.1|3>>
-    <associate|auto-6|<tuple|3.2|3>>
-    <associate|auto-7|<tuple|3.2.1|3>>
-    <associate|auto-8|<tuple|3.3|4>>
+    <associate|auto-4|<tuple|2.1.1|3>>
+    <associate|auto-5|<tuple|3|3>>
+    <associate|auto-6|<tuple|3.1|3>>
+    <associate|auto-7|<tuple|3.2|3>>
+    <associate|auto-8|<tuple|3.2.1|4>>
+    <associate|auto-9|<tuple|3.3|4>>
   </collection>
 </references>
 
@@ -308,25 +369,42 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-3>>
 
+      <with|par-left|<quote|2tab>|2.1.1<space|2spc>Initial condition
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-4>>
+
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Numerical
       Example> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-4><vspace|0.5fn>
+      <no-break><pageref|auto-5><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|3.1<space|2spc>1D
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5>>
+      <no-break><pageref|auto-6>>
 
       <with|par-left|<quote|1tab>|3.2<space|2spc>2D
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>>
+      <no-break><pageref|auto-7>>
 
       <with|par-left|<quote|2tab>|3.2.1<space|2spc>Example with explicit
       solution <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7>>
+      <no-break><pageref|auto-8>>
 
       <with|par-left|<quote|1tab>|3.3<space|2spc>Post-process
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>>
+      <no-break><pageref|auto-9>>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>Numerical
+      Setup of Neural Operator Problem:2D>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-10><vspace|0.5fn>
+
+      <with|par-left|<quote|1tab>|4.1<space|2spc>Grid
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-11>>
+
+      <with|par-left|<quote|1tab>|4.2<space|2spc>Initial Condition
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-12>>
     </associate>
   </collection>
 </auxiliary>
